@@ -1,34 +1,25 @@
 package page;
 
+import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
 import data.DataHelper;
+import data.SQLHelper;
 
-import static com.codeborne.selenide.Condition.visible;
+import java.time.Duration;
+
 import static com.codeborne.selenide.Selenide.$;
-//import static com.codeborne.selenide.Selenide.confirm;
-//import static jdk.internal.org.objectweb.asm.util.CheckClassAdapter.verify;
 
 public class VerificationPage {
+    private SelenideElement verificationField = $("[data-test-id=code] input");
+    private SelenideElement verificationButton = $("[data-test-id=action-verify]");
 
-    private final SelenideElement codeField = $("[data-test-id=code] input");
-    private final SelenideElement verifyButton = $("[data-test-id=action-verify]");
-    private final SelenideElement errorNotification = $("[data-test-id='error-notification']");
-
-    public void verifycationPageVisiblity() {
-        codeField.shouldBe(visible);
-    }
-
-    public void verifyErrorNotificationVisiblity() {
-        errorNotification.shouldBe(visible);
-    }
-
-    public DashboardPage validVerify(String verificationCode) {
-        verify(verificationCode);
+    public DashboardPage validVerification (String authCode) {
+        Verification(authCode);
         return new DashboardPage();
     }
 
-    public void verify(String verificationCode) {
-        codeField.setValue(verificationCode);
-        verifyButton.click();
+    public void Verification(String authCode) {
+        verificationField.shouldBe(Condition.visible).setValue(authCode);
+        verificationButton.click();
     }
 }

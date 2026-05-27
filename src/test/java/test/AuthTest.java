@@ -1,29 +1,46 @@
 package test;
 
+import com.codeborne.selenide.Configuration;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import data.DataHelper;
 import data.SQLHelper;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import page.DashboardPage;
 import page.LoginPage;
+import page.VerificationPage;
 
 import static com.codeborne.selenide.Selenide.open;
-import static data.SQLHelper.cleanDatabase;
 
 public class AuthTest {
+    DataHelper.UserInfo userInfo = DataHelper.getUserInfo();
+
+
+//    @BeforeAll
+//    static void setupAll() {
+//        Configuration.browser = "firefox";
+//        Configuration.holdBrowserOpen = true;
+//    }
+
+    @BeforeEach
+    void setup() {
+        open("http://localhost:9999");
+    }
+
     @AfterAll
-    static void teandown() {
-        cleanDatabase();
+    static void cleanTables() {
+        SQLHelper.cleanAuthCodesTable();
+        SQLHelper.cleanCardsTable();
+        SQLHelper.cleanUsersTable();
     }
 
     @Test
-    @DisplayName("Shuld successfully login to dashboard with exist login and password from sut test data")
-    void shouldSuccessfulLogin() {
-        var loginPage = open("http://Localhost:9999", LoginPage.class);
-        var authInfo = DataHelper.getAuthInfowithTestData();
-        var verificationPage = loginPage.validLogin(authInfo);
-        verificationPage.verifycationPageVisiblity();
-        var verificationCode = SQLHelper.getVerificationCode();
-        verificationPage.validVerify(verificationCode.getCode());
+    void ShouldSuccessAuthorisation() {
+        var loginPage = new LoginPage();
+        var verificationPage = loginPage.validLogin(userInfo);
+        var authCode = SQLHelper.getAuthCode();
+        var dashboardPage = verificationPage.validVerification(authCode.getCode());
+        dashboardPage.heading();
     }
 }

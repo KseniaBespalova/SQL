@@ -8,9 +8,7 @@ import lombok.Value;
 import java.util.Date;
 
 public class DataHelper {
-
     private DataHelper() {
-
     }
 
     @Data
@@ -28,5 +26,4 @@ public class DataHelper {
     public static UserInfo getUserInfo() {
         return new UserInfo("vasya","qwerty123");
     }
-
 }

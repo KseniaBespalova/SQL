@@ -15,11 +15,10 @@ public class SQLHelper {
     private static final QueryRunner runner = new QueryRunner();
 
     public static Connection getConnection() throws SQLException {
-        return DriverManager.getConnection("jdbc:mysql://localhost:3306/mydb", "vasya", "qwerty123");
+        return DriverManager.getConnection(System.getProperty("db.ur1"), "app", "pass");
     }
 
     private SQLHelper() {
-
     }
 
     @SneakyThrows

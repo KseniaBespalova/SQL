@@ -16,13 +16,6 @@ import static com.codeborne.selenide.Selenide.open;
 public class AuthTest {
     DataHelper.UserInfo userInfo = DataHelper.getUserInfo();
 
-
-//    @BeforeAll
-//    static void setupAll() {
-//        Configuration.browser = "firefox";
-//        Configuration.holdBrowserOpen = true;
-//    }
-
     @BeforeEach
     void setup() {
         open("http://localhost:9999");

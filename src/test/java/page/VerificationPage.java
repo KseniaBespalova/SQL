@@ -2,24 +2,34 @@ package page;
 
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
-import data.DataHelper;
-import data.SQLHelper;
-
-import java.time.Duration;
-
+import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$;
 
 public class VerificationPage {
-    private SelenideElement verificationField = $("[data-test-id=code] input");
-    private SelenideElement verificationButton = $("[data-test-id=action-verify]");
+    private final SelenideElement codeField = $("[data-test-id=code] input");
+    private final SelenideElement verifyButton = $("[data-test-id=action-verify]");
+    private final SelenideElement errorNotification = $("[data-test-id='error-notification']");
 
-    public DashboardPage validVerification (String authCode) {
-        Verification(authCode);
+    public VerificationPage() {
+        codeField.should(visible);
+    }
+
+    public void verifyError(String expectedText) {
+        errorNotification.should(visible).should(Condition.text(expectedText));
+    }
+
+    public DashboardPage validVerify(String verificationCode) {
+        verify(verificationCode);
         return new DashboardPage();
     }
 
-    public void Verification(String authCode) {
-        verificationField.shouldBe(Condition.visible).setValue(authCode);
-        verificationButton.click();
+    public void invalidVerify(String verificationCode, String expectedText) {
+        verify(verificationCode);
+        verifyError(expectedText);
+    }
+
+    public void verify(String verificationCode) {
+        codeField.setValue(verificationCode);
+        verifyButton.click();
     }
 }

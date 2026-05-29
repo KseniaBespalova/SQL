@@ -1,39 +1,34 @@
 package test;
 
-import com.codeborne.selenide.Configuration;
 import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import data.DataHelper;
 import data.SQLHelper;
-import page.DashboardPage;
 import page.LoginPage;
-import page.VerificationPage;
 
+import static data.SQLHelper.cleanDatabase;
 import static com.codeborne.selenide.Selenide.open;
 
 public class AuthTest {
-    DataHelper.UserInfo userInfo = DataHelper.getUserInfo();
 
-    @BeforeEach
-    void setup() {
-        open("http://localhost:9999");
-    }
+    public LoginPage loginPage;
 
     @AfterAll
     static void cleanTables() {
-        SQLHelper.cleanAuthCodesTable();
-        SQLHelper.cleanCardsTable();
-        SQLHelper.cleanUsersTable();
+        cleanDatabase();
+    }
+
+    @BeforeEach
+    void setup() {
+        loginPage = open("http://localhost:9999", LoginPage.class);
     }
 
     @Test
-    void ShouldSuccessAuthorisation() {
-        var loginPage = new LoginPage();
-        var verificationPage = loginPage.validLogin(userInfo);
-        var authCode = SQLHelper.getAuthCode();
-        var dashboardPage = verificationPage.validVerification(authCode.getCode());
-        dashboardPage.heading();
+    void shouldSuccessfulLogin() {
+        var authInfo = DataHelper.getAuthInfo();
+        var verificationPage = loginPage.validGoodLogin(authInfo);
+        var verificationCode = SQLHelper.getVerificationCode();
+        verificationPage.validVerify(verificationCode.getCode());
     }
 }

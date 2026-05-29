@@ -15,7 +15,7 @@ public class SQLHelper {
     private static final QueryRunner runner = new QueryRunner();
 
     public static Connection getConnection() throws SQLException {
-        return DriverManager.getConnection(System.getProperty("db.ur1"), "app", "pass");
+        return DriverManager.getConnection("jdbc:mysql://localhost:3306/app", "app", "pass");
     }
 
     private SQLHelper() {
